@@ -1,0 +1,6 @@
+{agent, [
+         {ignore, false},
+         {env, [
+                {"file", "/home/amranello/mtmp/test.log"}
+               ]}
+        ]}.

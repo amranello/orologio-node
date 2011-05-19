@@ -1,0 +1,4 @@
+-define(NAME_APP, 'orologio-node').
+-define(DEF_CFG, <<"defaults">>).
+-define(MOD_PART, "orologio-node_").
+-define(PORT_LINE, 1024).

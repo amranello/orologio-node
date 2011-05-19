@@ -1,0 +1,68 @@
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.39.0>},
+                       {name,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.40.0>},
+                       {name,overload},
+                       {mfargs,{overload,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.38.0>},
+                       {name,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.41.0>},
+                       {name,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+         application: sasl
+          started_at: 'orologio-node@administrator'
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+          supervisor: {local,agent_sup}
+             started: [{pid,<0.59.0>},
+                       {name,
+                           {<<"orologio-node@administrator">>,<<"log-test">>}},
+                       {mfargs,
+                           {'orologio-node_agent',start_link,
+                               [{<<"orologio-node@administrator">>,
+                                 <<"log-test">>}]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+          supervisor: {local,orologio_sup}
+             started: [{pid,<0.51.0>},
+                       {name,<<"agent_sup">>},
+                       {mfargs,{orologio_sups,start_link,[agent]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 12-Apr-2011::09:11:24 ===
+         application: 'orologio-node'
+          started_at: 'orologio-node@administrator'

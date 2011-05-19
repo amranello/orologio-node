@@ -1,0 +1,12 @@
+
+=INFO REPORT==== 12-Apr-2011::09:11:24 ===
+    'orologio-node_app': "Started"
+
+=INFO REPORT==== 12-Apr-2011::09:11:24 ===
+    <<"orologio-node@administrator_fetch_log-test">>: <<"Started">>
+
+=INFO REPORT==== 12-Apr-2011::11:22:37 ===
+    <<"orologio-node@administrator_agent_log-test">>: <<"Stoped">>
+
+=INFO REPORT==== 12-Apr-2011::11:22:37 ===
+    'orologio-node_app': "Stopped"
