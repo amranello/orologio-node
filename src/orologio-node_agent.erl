@@ -22,7 +22,7 @@
 
 -include("include/orologio-node.hrl").
 
--record(agent_state, {host, elem, port, tag}).
+-record(agent_state, {host, elem, port, tag, filter, pid = ""}).
 
 start_link({Host, Elem}) ->
   gen_server:start_link(?MODULE, {Host, Elem}, []).
@@ -47,29 +47,42 @@ handle_cast({init, Act}, State) ->
                                        )
                          ),
   Env = proplists:get_value(env, Cfg, ""),
-  Tag = proplists:get_value(tag, Cfg, update),
-  Port = open_port({spawn_executable, File}, [binary, in, {line, ?PORT_LINE}, {env, Env}]),
-  orologio_utils:log_report(info, [{orologio_utils:gen_name_mod({fetch, State#agent_state.host, State#agent_state.elem}),
+  Tag = proplists:get_value(tag, Cfg, event),
+  Flt = proplists:get_value(filter, Cfg, [".*"]),
+  Port = open_port({spawn, File}, [binary, in, {line, ?PORT_LINE}, {env, Env}]),
+  orologio_utils:log_report(info, [{orologio_utils:gen_name_mod({agent, State#agent_state.host, State#agent_state.elem}),
                                    Act}]),
-  {noreply, State#agent_state{port = Port, tag = Tag}};
+  {noreply, State#agent_state{port = Port, tag = Tag, filter = Flt}};
 
 handle_cast(recfg, State) ->
   catch port_close(State#agent_state.port),
+  os:cmd("kill " ++ State#agent_state.pid),
   handle_cast({init, <<"Config reloaded">>}, State);
 
 handle_cast(_Request, State) ->
   {noreply, State}.
 
 handle_info({_Port, {data, {_Eol, Data}}}, State) ->
-  catch orologio_utils:event(send, {{limit, State#agent_state.host, State#agent_state.elem},
-                                     {State#agent_state.tag, Data, now()}}),
-  {noreply, State};
+  NState = case binary_to_list(Data) of
+             "pid " ++ Pid ->
+               State#agent_state{pid = Pid};
+             _ ->
+               case re:run(Data, State#agent_state.filter, [{capture, all, binary}]) of
+                 {match, NData} ->
+                   catch orologio_utils:event(send, {{limit, State#agent_state.host, State#agent_state.elem},
+                                                     {State#agent_state.tag, NData, now()}});
+                 nomatch -> ok
+               end,
+               State
+           end,
+  {noreply, NState};
 
 handle_info(_Info, State) ->
   {noreply, State}.
 
 terminate(_Reason, State) ->
   catch port_close(State#agent_state.port),
+  os:cmd("kill " ++ State#agent_state.pid),
   orologio_utils:log_report(info, [{orologio_utils:gen_name_mod({agent, State#agent_state.host, State#agent_state.elem}),
                                     <<"Stoped">>}]),
   ok.
