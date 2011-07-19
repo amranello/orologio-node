@@ -1,3 +1,4 @@
 #!/bin/sh
 
-/usr/bin/tail -F $file | grep -E $check
+echo "pid $$"
+/usr/bin/tail -F -n 0 "$file"
