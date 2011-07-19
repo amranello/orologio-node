@@ -1,6 +1,7 @@
 {agent, [
          {ignore, false},
+         {filter, ".*"},
          {env, [
-                {"file", "/home/amranello/mtmp/test.log"}
+                {"file", "/home/amranello/111.log"}
                ]}
         ]}.
